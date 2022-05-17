@@ -1,1 +1,14 @@
 # Info-2022_Programme_GR
+
+Code Arduino pour Gros Robot de la Coupe de France De Robotique 2022
+
+## Répertoires
+
+Le Git est constitué des répertoires suivants:
+___
+### Code_Mega/
+Contient le code pour l'Arduino Mega chargée de l'asservissement et du système d'action. Elle gère également les actionneurs.
+
+___
+### Code_Nano/
+Contient le code pour l'Arduino Nano chargée de scruter en continue les retours des sonars et de communiquer le résultat à la Mega.
