@@ -1,23 +1,43 @@
 # Arduino Mega
 
-- Pin  6 (PWM)        -> Motor Right Forward
-- Pin  7 (PWM)        -> Motor Right Backward
-- Pin  8 (PWM)        -> Motor Right PWM
+- Pin  2 (PWM/INT4)   -> Encoder Right A
+- Pin  3 (PWM/INT5)   -> Encoder Right B
 
-- Pin  9 (PWM)        -> Motor Left Forward
-- Pin 10 (PWM)        -> Motor Left Backward
-- Pin 11 (PWM)        -> Motor Left PWM
+- Pin  4 (+ GND)      -> Tirette
+- Pin  5 (+ GND)      -> Switch Side Select (Yellow/Purple)
+
+- Pin  6 (PWM)        -> Vacuum Pump Right
+- Pin  7 (PWM)        -> Vacuum Pump Left
+
+- Pin  8 (PWM)        -> Motor Right Forward
+- Pin  9 (PWM)        -> Motor Right Backward
+- Pin 10 (PWM)        -> Motor Right PWM
+
+- Pin 11 (PWM)        -> Motor Left Forward
+- Pin 12 (PWM)        -> Motor Left Backward
+- Pin 13 (PWM)        -> Motor Left PWM
 
 - Pin 14 (TX3)        -> (<-> Nano 8 (SoftwareSerial RX))
 - Pin 15 (RX3)        -> (<-> Nano 9 (SoftwareSerial TX))
+- Pin 16 (TX2)        -> Data XL320
+- Pin 17 (RX2)        ->
+- Pin 18 (TX1)        -> Data AX-12A
+- Pin 19 (RX1)        ->
 
-**TODO :**
-- Switch Yellow/Blue
-- Tirette
-- Encoders Left/Right (needs interrupt pins)
-- Servos actionners x3 Left + x3 Right
-- Vacuum pump Left/Right
-- Status LEDs ? (Yellow/Blue, Fault, wait for tirette)
+- Pin 20 (SDA/INT1)   -> Encoder Left A
+- Pin 21 (SCL/INT0)   -> Encoder Left B
+
+- Pin 54/A0 (ADC)     -> Status Led Red
+- Pin 55/A1 (ADC)     -> Status Led Green
+- Pin 56/A2 (ADC)     -> Status Led Blue
+
+- Pin 57/A3 (ADC)     -> Current Shunt Vaccum Pump Right
+- Pin 58/A4 (ADC)     -> Current Shunt Vaccum Pump Left
+
+GPIO with GND & 5V:
+59/A5
+  |
+69/A15
 
 # Arduino Nano
 
