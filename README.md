@@ -2,6 +2,16 @@
 
 Code Arduino pour Gros Robot de la Coupe de France De Robotique 2022
 
+## Installation
+
+Cloner le Git avec ses sous-modules :
+```sh
+git clone --recurse-submodules <git>
+```
+(<git>= lien du repo en *https://* ou *git@*)
+
+___
+
 ## Répertoires
 
 Le Git est constitué des répertoires suivants:
