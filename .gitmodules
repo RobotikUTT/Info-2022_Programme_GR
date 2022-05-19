@@ -1,0 +1,3 @@
+[submodule "Code_Mega/lib/Arduino-SimpleTimer"]
+	path = Code_Mega/lib/Arduino-SimpleTimer
+	url = https://github.com/marcelloromani/Arduino-SimpleTimer.git
