@@ -49,17 +49,17 @@ GPIO with GND & 5V:
 - Pin  5 (PWM)        -> Sonar 0 Echo
 - Pin  6 (PWM)        -> Sonar 1 Trigger
 - Pin  7              -> Sonar 1 Echo
-- Pin  8              -> SoftwareSerial RX (<-> Mega 14 (TX3))
-- Pin  9 (PWM)        -> SoftwareSerial TX (<-> Mega 15 (RX3))
-- Pin 10 (SS/PWM)     -> Sonar 2 Trigger
-- Pin 11 (MOSI/PWM)   -> Sonar 2 Echo
-- Pin 12 (MISO)       -> Sonar 3 Trigger
-- Pin 13 (SCK)        -> Sonar 3 Echo
-- Pin 14/A0 (ADC)     ->
-- Pin 15/A1 (ADC)     ->
+- Pin  8              -> Sonar 2 Trigger
+- Pin  9 (PWM)        -> Sonar 2 Echo
+- Pin 10 (SS/PWM)     -> Sonar 3 Trigger
+- Pin 11 (MOSI/PWM)   -> Sonar 3 Echo
+- Pin 12 (MISO)       ->
+- Pin 13 (SCK)        ->
+- Pin 14/A0 (ADC)     -> SoftwareSerial RX (<-> Mega 14 (TX3))
+- Pin 15/A1 (ADC)     -> SoftwareSerial TX (<-> Mega 15 (RX3))
 - Pin 16/A2 (ADC)     ->
 - Pin 17/A3 (ADC)     ->
-- Pin 18/A4 (ADC/SDA) ->
-- Pin 19/A5 (ADC/SCL) ->
+- Pin 18/A4 (ADC/SDA) -> SDA LCD Display
+- Pin 19/A5 (ADC/SCL) -> SCL LCD Display
 - Pin A6 (ADC only)   ->
 - Pin A7 (ADC only)   ->
