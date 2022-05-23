@@ -13,6 +13,12 @@
 
 #include "lib/Arduino-SimpleTimer/SimpleTimer/SimpleTimer.h"
 
+/************************/
+/* ACTION SET SELECTION */
+/************************/
+#include "actionsets/manualServos.h"
+/************************/
+
 extern Motor rightMotor;
 extern Motor leftMotor;
 extern RobotState robotState;
@@ -40,9 +46,11 @@ void setup() {
 	rightMotor.init(true);
 	leftMotor.init(true);
 
-	goalsList.addGoal(new Goto(1, 500, 0.0, 300));
-
+	#ifndef BYPASS_TIRETTE
 	waitForTirette();
+	#endif // NOT BYPASS_TIRETTE
+
+	fillGoals();
 }
 
 void loop() {

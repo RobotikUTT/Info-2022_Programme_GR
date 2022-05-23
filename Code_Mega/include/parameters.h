@@ -6,9 +6,11 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-/* Debug prints */
+/* Debug parameters */
 // Uncomment/Comment to Enable/Disable Debug Prints
 #define DEBUG
+// #define BYPASS_TIRETTE
+
 // Choose (by commenting lines or not) which parts you want prints for
 #ifdef DEBUG
 #define DEBUG_MATCH
@@ -18,7 +20,7 @@
 #endif // DEBUG
 
 /* Main loop */
-#define RATE_HZ 200 // Hz
+#define RATE_HZ 100 // Hz
 #define TIMER_MS 1000.0 / (float)RATE_HZ // ms
 
 /* Speed constants */
