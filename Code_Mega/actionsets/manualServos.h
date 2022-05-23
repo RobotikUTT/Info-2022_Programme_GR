@@ -4,10 +4,21 @@
 **/
 
 #include <Arduino.h>
+
 #include "../include/goal.h"
 #include "../include/goalslist.h"
 
+#include "../lib/XL320/XL320.h"
+#include "../lib/AX-12A-servo-library/src/AX12A.h"
+
+
 #define BYPASS_TIRETTE
+
+#define DirectionPin  (10u)
+#define BaudRate    (1000000ul)
+#define ID    (254u)
+#define XLID 3
+#define XL1 1
 
 extern GoalsList goalsList;
 
