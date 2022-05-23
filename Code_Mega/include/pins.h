@@ -30,7 +30,7 @@
 
 #define SERIAL_AX12A	Serial1
 #define SERIAL_XL320	Serial2
-#define SERIAL_NANO	Serial3
+#define SERIAL_NANO		Serial3
 
 /* Status Leds */
 #define LED_RED				A0
