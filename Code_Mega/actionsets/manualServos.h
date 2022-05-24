@@ -16,8 +16,11 @@
 #define DirectionPin  (10u)
 #define BaudRate    (1000000ul)
 #define ID    (254u)
-#define XLID 3
-#define XL1 1
+#define XLR1 1
+#define XLR2 3
+#define XLL1 2
+#define XLL2 4
+
 
 extern GoalsList goalsList;
 
