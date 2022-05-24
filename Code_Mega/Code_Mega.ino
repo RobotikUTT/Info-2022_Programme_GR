@@ -2,16 +2,17 @@
  * \file Code_Mega.ino
  * \brief Holds the Arduino setup and loop functions, which make the robot run.
 */
+ 
+#include <SimpleTimer.h>
 
 #include "include/pins.h"
 #include "include/parameters.h"
 #include "include/motor.h"
 #include "include/control.h"
+#include "include/collisions.h"
 #include "include/robotstate.h"
 #include "include/goal.h"
 #include "include/goalslist.h"
-
-#include "lib/Arduino-SimpleTimer/SimpleTimer/SimpleTimer.h"
 
 /************************/
 /* ACTION SET SELECTION */

@@ -6,7 +6,7 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 
-#include <arduino.h>
+#include <Arduino.h>
 
 #include "pid.h"
 #include "motor.h"

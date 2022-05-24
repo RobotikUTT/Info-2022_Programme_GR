@@ -1,6 +1,3 @@
-[submodule "Code_Mega/lib/Arduino-SimpleTimer"]
-	path = Code_Mega/lib/Arduino-SimpleTimer
-	url = https://github.com/marcelloromani/Arduino-SimpleTimer.git
 [submodule "Code_Mega/lib/Encoder"]
 	path = Code_Mega/lib/Encoder
 	url = https://github.com/PaulStoffregen/Encoder.git
@@ -10,3 +7,6 @@
 [submodule "Code_Mega/lib/AX-12A-servo-library"]
 	path = Code_Mega/lib/AX-12A-servo-library
 	url = https://github.com/jumejume1/AX-12A-servo-library.git
+[submodule "Code_Mega/lib/SimpleTimer"]
+	path = Code_Mega/lib/SimpleTimer
+	url = https://github.com/schinken/SimpleTimer.git

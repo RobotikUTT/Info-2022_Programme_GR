@@ -4,12 +4,11 @@
 **/
 
 #include <Arduino.h>
+#include <XL320.h>
+#include <AX12A.h>
 
 #include "../include/goal.h"
 #include "../include/goalslist.h"
-
-#include "../lib/XL320/XL320.h"
-#include "../lib/AX-12A-servo-library/src/AX12A.h"
 
 
 #define BYPASS_TIRETTE
@@ -21,6 +20,7 @@
 #define XL1 1
 
 extern GoalsList goalsList;
+
 
 /**
  * \brief Parse Serial input and move servos accordingly. Never finish.

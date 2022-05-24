@@ -3,7 +3,7 @@
  * \brief Class which holds a fifo of goals. @see goal.h
 **/
 
-#include "../include/goalsList.h"
+#include "../include/goalslist.h"
 
 extern Control control;
 

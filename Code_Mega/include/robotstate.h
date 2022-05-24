@@ -8,10 +8,11 @@
 
 #define ENCODER_USE_INTERRUPTS
 
+#include <Encoder.h>
+
 #include "pins.h"
 #include "parameters.h"
 
-#include "../lib/Encoder/Encoder.h"
 
 typedef struct {float x, y, theta;} Position;
 typedef struct {float left, right;} WheelSpeeds;
