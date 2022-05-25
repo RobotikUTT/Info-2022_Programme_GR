@@ -10,3 +10,6 @@
 [submodule "Code_Mega/lib/SimpleTimer"]
 	path = Code_Mega/lib/SimpleTimer
 	url = https://github.com/schinken/SimpleTimer.git
+[submodule "Code_Nano/lib/LiquidCrystal_I2C"]
+	path = Code_Nano/lib/LiquidCrystal_I2C
+	url = https://github.com/johnrickman/LiquidCrystal_I2C.git
