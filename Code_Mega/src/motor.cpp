@@ -25,8 +25,8 @@ void Motor::enable(bool enabled) {
 	if (enabled != isEnabled) {
 		isEnabled = enabled;
 		if (isEnabled) {
-			digitalWrite(forwardPin, currentDir ? HIGH : LOW);
-			digitalWrite(backwardPin, currentDir ? LOW : HIGH);
+			digitalWrite(forwardPin, currentDir);
+			digitalWrite(backwardPin, !currentDir);
 			analogWrite(pwmPin, currentPWM);
 		} else {
 			digitalWrite(forwardPin, LOW);
@@ -51,23 +51,10 @@ void Motor::sendPWM(uint8_t pwm, bool dirForward, bool force) {
 
 	if (pwm != currentPWM) {
 		if (!force || dirForward == currentDir) {
-			if (pwm > currentPWM) {
-				if (pwm - currentPWM > MAX_PWM_DIFFERENCE) {
-					if (currentPWM >= 255 - MAX_PWM_DIFFERENCE) {
-						pwm = 255;
-					} else {
-						pwm += MAX_PWM_DIFFERENCE;
-					}
-				}
-			}
-			else {
-				if (currentPWM - pwm > MAX_PWM_DIFFERENCE) {
-					if (currentPWM <= MAX_PWM_DIFFERENCE) {
-						pwm = 0;
-					} else {
-						pwm -= MAX_PWM_DIFFERENCE;
-					}
-				}
+			if (pwm > currentPWM and pwm - currentPWM > MAX_PWM_DIFFERENCE) {
+				pwm = min(255, pwm + MAX_PWM_DIFFERENCE);	
+			} else if (currentPWM - pwm > MAX_PWM_DIFFERENCE) {
+				pwm = max(0, pwm - MAX_PWM_DIFFERENCE);
 			}
 		}
 
