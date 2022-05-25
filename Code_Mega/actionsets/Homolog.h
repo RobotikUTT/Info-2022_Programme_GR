@@ -1,3 +1,8 @@
+/*
+But de ce programme: passer les homologations dynamiques 
+en contournant les hexagones au sol puis en les poussant dans
+la zone de départ pour marquer des points
+*/
 
 #include "../include/goal.h"
 #include "../include/goalslist.h"
