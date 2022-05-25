@@ -7,8 +7,8 @@
 #define NB_CAPTORS 4
 #define MSG_PERIOD 5  /* 20 Hz => 5 milliseconds */
 
-const uint8_t trigger_pins[NB_CAPTORS]{4, 5, 6, 7};
-const uint8_t echo_pins[NB_CAPTORS]{8, 9, 10, 11};
+const uint8_t trigger_pins[NB_CAPTORS]{4, 6, 8, 10};
+const uint8_t echo_pins[NB_CAPTORS]{5, 7, 9, 11};
 uint8_t message{0};
 SoftwareSerial write_serial(2, 3);
 
@@ -31,7 +31,7 @@ void setup() {
 void loop() {
     for (int i = 0; i < NB_CAPTORS; ++i) {
         const double distance = get_distance(i);
-        if (distance < 300)
+        if (distance < 150)
             message |= 0b1 << i;  // set the i-th bit to 1
         else
             message &= ~(0b1 << i);  // set the i-th bit to 0
@@ -63,4 +63,3 @@ inline void send_message(const uint8_t message) {
         write_serial.write(message);
     }
 }
-
