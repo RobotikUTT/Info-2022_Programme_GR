@@ -8,6 +8,11 @@ Cloner le Git avec ses sous-modules (automatique avec GitHub Desktop) :
 ```sh
 git clone --recurse-submodules <git>
 ```
+Ajouter des sous-modules dans le git qui ont été rajoutés sur github:
+```sh
+git pull --recurse-submodules <git>
+```
+
 (<git>= lien du repo en *https://* ou *git@*)
 
 ___
