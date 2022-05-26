@@ -10,7 +10,7 @@
 
 #include "parameters.h"
 
-#define SLIDING_AVG_NB 20
+#define SLIDING_AVG_NB 50
 
 class PID {
 public:
@@ -40,10 +40,10 @@ private:
 	float lastError = 0;
 	unsigned long lastErrorTime = 0;
 
-	float slidingAvgTab[SLIDING_AVG_NB];
+	float slidingAvgTab[SLIDING_AVG_NB] = {0};
 	float slidingAvgSum = 0;
 	uint8_t slidingAvgIdx = 0;
-	uint8_t nbVal = 0;
+	// uint8_t nbVal = 0;
 
 	void updateErrors(float error);
 };

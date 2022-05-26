@@ -25,6 +25,7 @@ public:
     **/
     void update();
 
+    void setPosition(Position pos) { position = pos; }
     inline const Position getPosition() const { return position; }
     inline const WheelSpeeds getWheelSpeeds() const { return wheelSpeeds; }
 

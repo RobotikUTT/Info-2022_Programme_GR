@@ -25,18 +25,26 @@ void RobotState::update() {
 
 	float dLeft = (float)(leftTicks - leftLastTicks) * DISTANCE_PER_TICK_L;    // mm
 	float dRight = (float)(rightTicks - rightLastTicks) * DISTANCE_PER_TICK_R; // mm
-	wheelSpeeds.left = (1000 * dLeft) / dt;   // mm/s
-	wheelSpeeds.right = (1000 * dRight) / dt; // mm/s
+	float speedLeft = (1000 * dLeft) / dt;   // mm/s
+	float speedRight = (1000 * dRight) / dt; // mm/s
+	if (abs(speedLeft) > 10 * MAX_SPEED || abs(speedRight) > 10 * MAX_SPEED) {
+		#ifdef DEBUG_ROBOTSTATE
+		Serial.println("RobotState: Warning ! Invalid speed value ! Ignoring.");
+		#endif // DEBUG_ROBOTSTATE
+		return;
+	}
+	wheelSpeeds.left = speedLeft;
+	wheelSpeeds.right = speedRight;
 
 	float dAngle = atan2((dRight - dLeft), ENTRAXE);
 	position.theta += dAngle;
-	// position.theta = fmod(position.theta, 2 * M_PI);
-	float tetaMod = fmod(position.theta, 2 * M_PI);
+	position.theta = fmod(position.theta, 2 * M_PI);
+	// float tetaMod = fmod(position.theta, 2 * M_PI);
 
 	float dDistance = (dRight + dLeft) / 2.0;
 
-	// float meanTrajAngle = (position.theta + lastAngle) / 2.0;
-	float meanTrajAngle = (tetaMod + lastAngle) / 2.0;
+	float meanTrajAngle = (position.theta + lastAngle) / 2.0;
+	// float meanTrajAngle = (tetaMod + lastAngle) / 2.0;
 
 	position.x += dDistance * cos(meanTrajAngle);
 	position.y += dDistance * sin(meanTrajAngle);
@@ -59,8 +67,8 @@ void RobotState::update() {
 	#endif // DEBUG_ROBOTSTATE
 
 	lastMillis = t;
-	lastAngle = tetaMod;
-	// lastAngle = position.theta;
+	// lastAngle = tetaMod;
+	lastAngle = position.theta;
 	rightLastTicks = rightTicks;
 	leftLastTicks = leftTicks;
 }

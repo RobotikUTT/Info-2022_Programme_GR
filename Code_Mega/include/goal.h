@@ -51,9 +51,11 @@ public:
 	virtual void process();
 
 private:
-	float x, y, maxSpeed; // mm, mm, mm/s
+	float x, y, theta, maxSpeed; // mm, mm, mm/s
+	float rampCoeff = 0;
 	unsigned long startTimeoutStop = 0;
-	bool stop = false;
+	bool stop = false, init = false, doSubGoal = false;
+	Goal* subGoal;
 };
 
 /**
@@ -66,8 +68,9 @@ public:
 	virtual void process();
 
 private:
-	float theta; // rad
-	bool stop = false;
+	float x, y, theta; // rad
+	float rampCoeff = 0;
+	bool stop = false, init = true;
 	unsigned long startTimeoutStop = 0;
 };
 
@@ -89,6 +92,7 @@ public:
 
 private:
 	float linearSpeed, angularSpeed; // mm/s, mm/s
+	float rampCoeff = 0;
 	unsigned long duration, // ms
 	startTimeGoal = 0, startTimeoutStop = 0; // ms, ms
 };

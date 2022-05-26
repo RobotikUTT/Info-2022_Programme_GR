@@ -38,17 +38,17 @@ public:
 	float getTargetRightSpeed() { return targetRightSpeed; }
 
 private:
-	PID linearPID = PID(0.4, 0.002, 0, 400 / 0.002);
-	PID angularPID = PID(24, 0.2, 0, 200 / 0.2);
-	PID leftWheelPID = PID(0.9, 0.02, 0, 255.0 / 0.02);
-	PID rightWheelPID = PID(0.9, 0.02, 0, 255.0 / 0.02);
+	PID linearPID = PID(1.8, 0, -0.1, 50 / 0.0002);
+	PID angularPID = PID(130, 0, -0.2, MAX_ANGULAR_SPEED / 0.25);
+	PID leftWheelPID = PID(3.2, 0.05, 0, 255.0 / 0.05);
+	PID rightWheelPID = PID(3.2, 0.05, 0, 255.0 / 0.05);
 
 	float currentLinearSpeed = 0;
 	float currentAngularSpeed = 0;
 	float targetLeftSpeed = 0;
 	float targetRightSpeed = 0;
 
-	void updateMotor(Motor &motor, PID &pid, float error);
+	void updateMotor(Motor &motor, PID &pid, float error, float targetSpeed);
 };
 
 #endif // CONTROL_H

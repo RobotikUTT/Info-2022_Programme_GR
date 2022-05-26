@@ -21,12 +21,17 @@ void Control::resetPIDs() {
 }
 
 void Control::updateSpeeds(float distanceError, float thetaError, float maxLinearSpeed) {
+	// static float lastDistanceError = 0;
+	// distanceError = (distanceError + lastDistanceError) / 2;
+	// lastDistanceError = distanceError;
 	float targetLinearSpeed = filterLinearSpeed(linearPID.output(distanceError), maxLinearSpeed);
 	float targetAngularSpeed = filterAngularSpeed(angularPID.output(thetaError));
 	updateMotorsSpeeds(targetLinearSpeed, targetAngularSpeed);
 }
 
 void Control::updateMotorsSpeeds(float targetLinearSpeed, float targetAngularSpeed) {
+	// static float lastLeftError = 0, lastRightError = 0;
+
 	targetLeftSpeed = targetLinearSpeed - targetAngularSpeed;
 	targetRightSpeed = targetLinearSpeed + targetAngularSpeed;
 	float leftError = 0;
@@ -47,17 +52,34 @@ void Control::updateMotorsSpeeds(float targetLinearSpeed, float targetAngularSpe
 	leftError = targetLeftSpeed - robotState.getWheelSpeeds().left;
 	rightError = targetRightSpeed - robotState.getWheelSpeeds().right;
 
-	updateMotor(leftMotor, leftWheelPID, leftError);
-	updateMotor(rightMotor, rightWheelPID, rightError);
+	// leftError = (leftError + lastLeftError) / 2;
+	// lastLeftError = leftError;
+
+	// rightError = (rightError + lastRightError) / 2;
+	// lastRightError = rightError;
+
+	updateMotor(leftMotor, leftWheelPID, leftError, targetLeftSpeed);
+	updateMotor(rightMotor, rightWheelPID, rightError, targetRightSpeed);
 }
 
-void Control::updateMotor(Motor &motor, PID &pid, float error) {
+void Control::updateMotor(Motor &motor, PID &pid, float error, float targetSpeed) {
 	int pwm = pid.output(error);
-	bool dirForward = (pwm > 0);
+	bool dirForward;
+	if (!targetSpeed) {
+		dirForward = motor.getCurrentDir();
+		pwm = 0;
+	}
+	else if (targetSpeed >= 0) {
+		dirForward = true;
+		pwm = max(pwm, 0);
+	}
+	else {
+		dirForward = false;
+		pwm = -min(pwm, 0);
+	}
 
-	if (!dirForward) pwm = -pwm;
 	if (pwm > 255) pwm = 255;
- 
+
 	motor.sendPWM(pwm, dirForward);
 }
 

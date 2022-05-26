@@ -9,7 +9,7 @@
 /* Debug parameters */
 // Uncomment/Comment to Enable/Disable Debug Prints
 // #define DEBUG
-#define PLOT
+// #define PLOT
 // #define BYPASS_TIRETTE
 
 #ifdef PLOT
@@ -23,24 +23,24 @@
 #ifdef DEBUG
 #define DEBUG_MATCH
 #define DEBUG_GOAL
-#define DEBUG_PID
-#define DEBUG_MOTOR
-#define DEBUG_ROBOTSTATE
+// #define DEBUG_PID
+// #define DEBUG_MOTOR
+// #define DEBUG_ROBOTSTATE
 #endif // DEBUG
 
 /* Main loop */
-#define RATE_HZ 50 // Hz
+#define RATE_HZ 20 // Hz
 #define TIMER_MS (1000.0 / RATE_HZ) // ms
 #define MATCH_LENGTH_MS 99000 // ms
 
 /* Speed constants */
-#define MAX_SPEED 400 // mm/s
+#define MAX_SPEED 350 // mm/s
 #define MAX_ANGULAR_SPEED 250 // mm/s
 #define MAX_ACCEL 15000 // mm/s^2
-#define MAX_ACCELERATION_DIFFERENCE 100	//MAX_ACCEL / RATE_HZ // mm/s
-#define BRAKE_COEFF 0.3	// brakes BRAKE_COEFF times more than accelerates
+#define MAX_ACCELERATION_DIFFERENCE 2	//MAX_ACCEL / RATE_HZ // mm/s
+#define BRAKE_COEFF 5.0	// brakes BRAKE_COEFF times more than accelerates
 #define MAX_BRAKE_DIFFERENCE (MAX_ACCELERATION_DIFFERENCE * BRAKE_COEFF) // mm/s
-#define MAX_PWM_DIFFERENCE_ACC 30
+#define MAX_PWM_DIFFERENCE_ACC 15
 #define MAX_PWM_DIFFERENCE_BRK 30
 #define STOP_TIMEOUT_MS 1000
 
@@ -57,7 +57,8 @@
 #define COLLISIONS_STOP_DISTANCE 150 // mm
 
 /* Goals */
-#define DIST_ERROR_TOLERANCE 2 // mm
+#define RAMP_NB_STEPS 50
+#define DIST_ERROR_TOLERANCE 5 // mm
 #define THETA_ERROR_TOLERANCE 0.01 // rad
 #define SPEED_STOP_TOLERANCE 1 // mm/s
 #define MAX_SIMULTANEOUS_GOALS 50

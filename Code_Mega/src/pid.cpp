@@ -21,24 +21,26 @@ void PID::updateErrors(float newError) {
 		errorSum = - maxIError;
 	}
 	// derivativeError = (error - lastError) * 1000.0 / TIMER_MS;
-	unsigned long deltaT = TIMER_MS;
-	if (lastErrorTime) { 
-		deltaT = millis() - lastErrorTime;
-	}
-	derivativeError = (error - lastError) * 1000.0 / deltaT;
-	if (nbVal >= SLIDING_AVG_NB) {
-		slidingAvgSum -= slidingAvgTab[slidingAvgIdx];
-	} else {
-		nbVal++;
-	}
-	slidingAvgTab[slidingAvgIdx] = derivativeError;
-	slidingAvgSum += derivativeError;
-	slidingAvgIdx = (slidingAvgIdx + 1) % SLIDING_AVG_NB;
+	// unsigned long deltaT = TIMER_MS;
+	// if (lastErrorTime) { 
+	// 	deltaT = millis() - lastErrorTime;
+	// }
+	// derivativeError = (error - lastError) * 1000.0 / deltaT;
+	derivativeError = (error - lastError);
+	// if (nbVal >= SLIDING_AVG_NB) {
+	// 	slidingAvgSum -= slidingAvgTab[slidingAvgIdx];
+	// } else {
+	// 	nbVal++;
+	// }
+	// slidingAvgSum -= slidingAvgTab[slidingAvgIdx];
+	// slidingAvgTab[slidingAvgIdx] = derivativeError;
+	// slidingAvgSum += derivativeError;
+	// slidingAvgIdx = (slidingAvgIdx + 1) % SLIDING_AVG_NB;
 
-	derivativeError = slidingAvgSum / nbVal;
+	// derivativeError = slidingAvgSum / SLIDING_AVG_NB;
 
 	lastError = error;
-	lastErrorTime = millis();
+	// lastErrorTime = millis();
 
 	#ifdef DEBUG_PID
 	Serial.print("PID ERROR: ");
@@ -59,5 +61,7 @@ void PID::resetErrors() {
 
 	slidingAvgSum = 0;
 	slidingAvgIdx = 0;
-	nbVal = 0;
+	for(uint8_t i=0; i<SLIDING_AVG_NB; i++) {
+		slidingAvgTab[i] = 0;
+	}
 }

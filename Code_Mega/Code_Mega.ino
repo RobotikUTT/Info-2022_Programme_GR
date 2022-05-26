@@ -19,7 +19,8 @@
 /* ACTION SET SELECTION */
 /************************/
 // #include "actionsets/manualServos.h"
-#include "actionsets/calibration.h"
+// #include "actionsets/calibration.h"
+#include "actionsets/homologation.h"
 // void fillGoals() {};	// Uncomment for no Action Set
 /************************/
 
@@ -89,10 +90,11 @@ void setup() {
 	leftMotor.init(true);
 	rightMotor.init(true);
 
+	checkSwitchSideSelect(true);
 	#ifndef BYPASS_TIRETTE
 	waitForTirette();
 	#endif // NOT BYPASS_TIRETTE
-	checkSwitchSideSelect();
+	checkSwitchSideSelect(false);
 
 	matchStart = millis();
 	fillGoals();
@@ -139,7 +141,8 @@ void waitForTirette() {
 				last_millis = millis();
 				digitalWrite(LED_RED, led_state ^= 1);
 			}
-		delay(1);
+			checkSwitchSideSelect(false);
+			delay(1);
 		}
 		digitalWrite(LED_RED, led_state = false);
 		delay(300);
@@ -154,6 +157,7 @@ void waitForTirette() {
 			last_millis = millis();
 			digitalWrite(LED_BLUE, led_state ^= 1);
 		}
+		checkSwitchSideSelect(false);
 		delay(1);
 	}
 	digitalWrite(LED_BLUE, HIGH);
@@ -162,18 +166,22 @@ void waitForTirette() {
 	#endif // DEBUG_MATCH
 }
 
-void checkSwitchSideSelect() {
-	isSideYellow = !digitalRead(SWITCH_SIDE_SELECT);
-	if (isSideYellow) {
-		digitalWrite(LED_SIDE_YELLOW, HIGH);
+void checkSwitchSideSelect(bool force) {
+	if (force || isSideYellow != !digitalRead(SWITCH_SIDE_SELECT)) {
+		isSideYellow = !digitalRead(SWITCH_SIDE_SELECT);
+		if (isSideYellow) {
+			digitalWrite(LED_SIDE_YELLOW, HIGH);
+			digitalWrite(LED_SIDE_PURPLE, LOW);
+		}
+		else {
+			digitalWrite(LED_SIDE_YELLOW, LOW);
+			digitalWrite(LED_SIDE_PURPLE, HIGH);
+		}
+		#ifdef DEBUG_MATCH
+		Serial.print("Side Selected: ");
+		Serial.println(isSideYellow ? "YELLOW" : "PURPLE");
+		#endif // DEBUG_MATCH
 	}
-	else {
-		digitalWrite(LED_SIDE_PURPLE, HIGH);
-	}
-	#ifdef DEBUG_MATCH
-	Serial.print("Side Selected: ");
-	Serial.println(isSideYellow ? "YELLOW" : "PURPLE");
-	#endif // DEBUG_MATCH
 }
 
 void plot() {
@@ -183,15 +191,15 @@ void plot() {
 		WheelSpeeds currSpeed = robotState.getWheelSpeeds();
 		Serial.print(currSpeed.left);
 		Serial.write(' ');
-		Serial.print(leftMotor.getCurrentPWM());
+		Serial.print((leftMotor.getCurrentDir() ? 1 : -1) * leftMotor.getCurrentPWM());
 		Serial.write(' ');
 		// Serial.print(currSpeed.right);
 		// Serial.write(' ');
 		#endif // PLOT_MOTOR_SPD
 		#ifdef PLOT_MOTOR_ERR
-		PID pidL = control.getLeftWheelPID();
+		// PID pidL = control.getLeftWheelPID();
 		// PID pidL = control.getAngularPID();
-		// PID pidL = control.getLinearPID();
+		PID pidL = control.getLinearPID();
 		// PID pidR = control.getRightWheelPID();
 		Serial.print(pidL.getError() * pidL.getP());
 		Serial.write(' ');
