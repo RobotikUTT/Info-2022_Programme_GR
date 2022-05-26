@@ -8,6 +8,8 @@
 
 #include "pins.h"
 #include "parameters.h"
+#include "robotstate.h"
+#include "nano.h"
 
 //typedef struct {float ahead, behind;} Obstacle;
 
@@ -17,12 +19,11 @@ public:
 	 * Updates the maximal speed based on the distance to the nearest obstacle.
 	**/
 	void update();
-	float readSensors(short triggerpin, short echopin );
-	const float getMaxSpeed();
+	float getMaxSpeed() { return maxSpeed; }
 
 private:
-	int maxSpeed; // mm/s
-	//Obstacle obst = {0,0};
+	uint8_t activeCounts[4] = {0};
+	float maxSpeed = MAX_SPEED; // mm/s
 };
 
 #endif // COLLISIONS_H

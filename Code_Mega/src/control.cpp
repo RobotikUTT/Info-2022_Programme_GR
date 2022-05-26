@@ -5,10 +5,10 @@
 
 #include "../include/control.h"
 
-extern Motor rightMotor;
-extern Motor leftMotor;
 extern RobotState robotState;
 extern Collisions collisions;
+extern Motor leftMotor;
+extern Motor rightMotor;
 
 Control control;
 
@@ -21,35 +21,37 @@ void Control::resetPIDs() {
 }
 
 void Control::updateSpeeds(float distanceError, float thetaError, float maxLinearSpeed) {
-	targetLinearSpeed = filterLinearSpeed(linearPID.output(distanceError), maxLinearSpeed);
-	targetAngularSpeed = angularPID.output(thetaError); // no collisions or speed check on angular speed
-	updateMotorsSpeeds();
+	float targetLinearSpeed = filterLinearSpeed(linearPID.output(distanceError), maxLinearSpeed);
+	float targetAngularSpeed = filterAngularSpeed(angularPID.output(thetaError));
+	updateMotorsSpeeds(targetLinearSpeed, targetAngularSpeed);
 }
 
-void Control::updateMotorsSpeeds() {
-	float targetLeftSpeed = targetLinearSpeed - targetAngularSpeed;
-	float targetRightSpeed = targetLinearSpeed + targetAngularSpeed;
+void Control::updateMotorsSpeeds(float targetLinearSpeed, float targetAngularSpeed) {
+	targetLeftSpeed = targetLinearSpeed - targetAngularSpeed;
+	targetRightSpeed = targetLinearSpeed + targetAngularSpeed;
 	float leftError = 0;
 	float rightError = 0;
 
-	if (abs(robotState.getWheelSpeeds().left) > abs(targetLeftSpeed)){
-		leftError = 0;
-	}
-	else {
-		leftError = targetLeftSpeed - robotState.getWheelSpeeds().left;
-	}
-	if (abs(robotState.getWheelSpeeds().right) > abs(targetRightSpeed)){
-		rightError = 0;
-	}
-	else {
-		rightError = targetRightSpeed - robotState.getWheelSpeeds().right;
-	}
+	// if (abs(robotState.getWheelSpeeds().left) > abs(targetLeftSpeed)){
+	// 	leftError = 0;
+	// }
+	// else {
+	// 	leftError = targetLeftSpeed - robotState.getWheelSpeeds().left;
+	// }
+	// if (abs(robotState.getWheelSpeeds().right) > abs(targetRightSpeed)){
+	// 	rightError = 0;
+	// }
+	// else {
+	// 	rightError = targetRightSpeed - robotState.getWheelSpeeds().right;
+	// }
+	leftError = targetLeftSpeed - robotState.getWheelSpeeds().left;
+	rightError = targetRightSpeed - robotState.getWheelSpeeds().right;
 
 	updateMotor(leftMotor, leftWheelPID, leftError);
 	updateMotor(rightMotor, rightWheelPID, rightError);
 }
 
-void Control::updateMotor(Motor motor, PID pid, float error) {
+void Control::updateMotor(Motor &motor, PID &pid, float error) {
 	int pwm = pid.output(error);
 	bool dirForward = (pwm > 0);
 
@@ -69,10 +71,10 @@ float Control::filterLinearSpeed(float speed, float maxSpeed) {
 			speed = collisions.getMaxSpeed();
 		}
 
-		if (speed - currentSpeed > MAX_ACCELERATION_DIFFERENCE) {
-			speed = currentSpeed + MAX_ACCELERATION_DIFFERENCE;
-		} else if (speed - currentSpeed < - MAX_BRAKE_DIFFERENCE) {
-			speed = currentSpeed - MAX_BRAKE_DIFFERENCE;
+		if (speed - currentLinearSpeed > MAX_ACCELERATION_DIFFERENCE) {
+			speed = currentLinearSpeed + MAX_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentLinearSpeed < - MAX_BRAKE_DIFFERENCE) {
+			speed = currentLinearSpeed - MAX_BRAKE_DIFFERENCE;
 		}
 
 		if (speed > maxSpeed) {
@@ -84,10 +86,10 @@ float Control::filterLinearSpeed(float speed, float maxSpeed) {
 			speed = - collisions.getMaxSpeed();
 		}
 
-		if (speed - currentSpeed < - MAX_ACCELERATION_DIFFERENCE) {
-			speed = currentSpeed - MAX_ACCELERATION_DIFFERENCE;
-		} else if (speed - currentSpeed > MAX_BRAKE_DIFFERENCE) {
-			speed = currentSpeed + MAX_BRAKE_DIFFERENCE;
+		if (speed - currentLinearSpeed < - MAX_ACCELERATION_DIFFERENCE) {
+			speed = currentLinearSpeed - MAX_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentLinearSpeed > MAX_BRAKE_DIFFERENCE) {
+			speed = currentLinearSpeed + MAX_BRAKE_DIFFERENCE;
 		}
 
 		if (speed < - maxSpeed) {
@@ -95,6 +97,42 @@ float Control::filterLinearSpeed(float speed, float maxSpeed) {
 		}
 	}
 
-	currentSpeed = speed;
+	currentLinearSpeed = speed;
+	return speed;
+}
+
+float Control::filterAngularSpeed(float speed) {
+	if (speed >= 0) {
+		if (speed > collisions.getMaxSpeed()) {
+			speed = collisions.getMaxSpeed();
+		}
+
+		if (speed - currentAngularSpeed > MAX_ACCELERATION_DIFFERENCE) {
+			speed = currentAngularSpeed + MAX_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentAngularSpeed < - MAX_BRAKE_DIFFERENCE) {
+			speed = currentAngularSpeed - MAX_BRAKE_DIFFERENCE;
+		}
+
+		if (speed > MAX_ANGULAR_SPEED) {
+			speed = MAX_ANGULAR_SPEED;
+		}
+	}
+	else { // speed < 0 : going backwards
+		if (speed < - collisions.getMaxSpeed()) {
+			speed = - collisions.getMaxSpeed();
+		}
+
+		if (speed - currentAngularSpeed < - MAX_ACCELERATION_DIFFERENCE) {
+			speed = currentAngularSpeed - MAX_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentAngularSpeed > MAX_BRAKE_DIFFERENCE) {
+			speed = currentAngularSpeed + MAX_BRAKE_DIFFERENCE;
+		}
+
+		if (speed < - MAX_ANGULAR_SPEED) {
+			speed = - MAX_ANGULAR_SPEED;
+		}
+	}
+
+	currentAngularSpeed = speed;
 	return speed;
 }

@@ -5,8 +5,8 @@
 
 #include "../include/motor.h"
 
-Motor rightMotor = Motor(MOT_RIGHT_FORWARD, MOT_RIGHT_BACKWARD, MOT_RIGHT_PWM, 'R');
 Motor leftMotor = Motor(MOT_LEFT_FORWARD, MOT_LEFT_BACKWARD, MOT_LEFT_PWM, 'L');
+Motor rightMotor = Motor(MOT_RIGHT_FORWARD, MOT_RIGHT_BACKWARD, MOT_RIGHT_PWM, 'R');
 
 
 Motor::Motor(uint8_t forwardPin, uint8_t backwardPin, uint8_t pwmPin, char dbg_id)
@@ -49,23 +49,31 @@ void Motor::sendPWM(uint8_t pwm, bool dirForward, bool force) {
 		digitalWrite(backwardPin, LOW);
 	}
 
+	#ifdef DEBUG_MOTOR
+	Serial.write(dbg_id);
+	Serial.print(" motor: Curr PWM: ");
+	Serial.print(currentPWM);
+	Serial.print("; Wanted PWM: ");
+	Serial.println(pwm);
+	#endif // DEBUG_MOTOR
+
 	if (pwm != currentPWM) {
 		if (!force || dirForward == currentDir) {
 			if (pwm > currentPWM) {
-				if (pwm - currentPWM > MAX_PWM_DIFFERENCE) {
-					if (currentPWM >= 255 - MAX_PWM_DIFFERENCE) {
+				if (pwm - currentPWM > MAX_PWM_DIFFERENCE_ACC) {
+					if (currentPWM >= 255 - MAX_PWM_DIFFERENCE_ACC) {
 						pwm = 255;
 					} else {
-						pwm += MAX_PWM_DIFFERENCE;
+						pwm = currentPWM + MAX_PWM_DIFFERENCE_ACC;
 					}
 				}
 			}
 			else {
-				if (currentPWM - pwm > MAX_PWM_DIFFERENCE) {
-					if (currentPWM <= MAX_PWM_DIFFERENCE) {
+				if (currentPWM - pwm > MAX_PWM_DIFFERENCE_BRK) {
+					if (currentPWM <= MAX_PWM_DIFFERENCE_BRK) {
 						pwm = 0;
 					} else {
-						pwm -= MAX_PWM_DIFFERENCE;
+						pwm = currentPWM - MAX_PWM_DIFFERENCE_BRK;
 					}
 				}
 			}
@@ -78,7 +86,7 @@ void Motor::sendPWM(uint8_t pwm, bool dirForward, bool force) {
 		#ifdef DEBUG_MOTOR
 		Serial.write(dbg_id);
 		Serial.print(" motor: New PWM: ");
-		Serial.println(pwm);
+		Serial.println(currentPWM);
 		#endif // DEBUG_MOTOR
 	}
 

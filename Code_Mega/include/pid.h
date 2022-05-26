@@ -6,7 +6,11 @@
 #ifndef PID_H
 #define PID_H
 
+#include <Arduino.h>
+
 #include "parameters.h"
+
+#define SLIDING_AVG_NB 20
 
 class PID {
 public:
@@ -19,13 +23,27 @@ public:
 	float output(float newError);
 	void resetErrors();
 
+	float getP() { return P; }
+	float getI() { return I; }
+	float getD() { return D; }
+
+	float getError() { return error; }
+	float getErrorSum() { return errorSum; }
+	float getDerivativeError() { return derivativeError; }
+
 private:
 	float P, I, D;
 	float maxIError;
-
 	float error = 0;
 	float errorSum = 0;
+	float derivativeError = 0;
 	float lastError = 0;
+	unsigned long lastErrorTime = 0;
+
+	float slidingAvgTab[SLIDING_AVG_NB];
+	float slidingAvgSum = 0;
+	uint8_t slidingAvgIdx = 0;
+	uint8_t nbVal = 0;
 
 	void updateErrors(float error);
 };

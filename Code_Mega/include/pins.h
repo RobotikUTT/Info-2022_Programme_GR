@@ -16,13 +16,13 @@
 #define ENCODER_LEFT_B		21
 
 /* Motors */
-#define MOT_RIGHT_FORWARD	8
-#define MOT_RIGHT_BACKWARD	9
-#define MOT_RIGHT_PWM		10
+#define MOT_RIGHT_FORWARD	11
+#define MOT_RIGHT_BACKWARD	13
+#define MOT_RIGHT_PWM		12
 
-#define MOT_LEFT_FORWARD	11
-#define MOT_LEFT_BACKWARD	12
-#define MOT_LEFT_PWM		13
+#define MOT_LEFT_FORWARD	9
+#define MOT_LEFT_BACKWARD	8
+#define MOT_LEFT_PWM		10
 
 /* Actuators */
 #define VACUUM_PUMP_RIGHT	6
@@ -36,6 +36,8 @@
 #define LED_RED				A0
 #define LED_GREEN			A1
 #define LED_BLUE			A2
+#define LED_SIDE_YELLOW     52
+#define LED_SIDE_PURPLE     53
 
 /* Sensors */
 #define CURRENT_VPUMP_RIGHT	A3

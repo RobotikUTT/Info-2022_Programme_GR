@@ -9,6 +9,8 @@ extern Control control;
 
 GoalsList goalsList;
 
+void theEnd();
+
 
 void GoalsList::resetGoals() {
 	currentGoalIndex = 0;
@@ -16,20 +18,10 @@ void GoalsList::resetGoals() {
 	goalsPtr[currentGoalIndex] = new Goal();
 }
 
-void end() {
-	// digitalWrite(FORWARD_LEFT, 0);
-	// digitalWrite(BACKWARDS_LEFT, LOW);
-	// digitalWrite(FORWARD_RIGHT, LOW);
-	// digitalWrite(BACKWARDS_RIGHT, 0);
-	while (true) {
-
-	}
-}
-
 void GoalsList::processCurrentGoal() {
 	if (goalsPtr[currentGoalIndex]->isReached()){
 		if (currentGoalIndex >= lastGoalIndex) {
-			end();
+			theEnd();
 		}
 		else {
 			currentGoalIndex++;

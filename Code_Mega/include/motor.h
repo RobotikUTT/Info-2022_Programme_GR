@@ -19,6 +19,9 @@ public:
 	void enable(bool isEnable);
 	void sendPWM(uint8_t pwm, bool dirForward, bool force=false);
 
+	uint8_t getCurrentPWM() { return currentPWM; }
+	bool getCurrentDir() { return currentDir; }
+
 private:
 	uint8_t forwardPin;
 	uint8_t backwardPin;
