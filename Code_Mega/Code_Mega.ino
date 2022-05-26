@@ -85,6 +85,8 @@ void setup() {
 	pinMode(LED_BLUE, OUTPUT);
 	pinMode(LED_SIDE_YELLOW, OUTPUT);
 	pinMode(LED_SIDE_PURPLE, OUTPUT);
+	pinMode(VACUUM_PUMP_RIGHT, OUTPUT);
+	pinMode(VACUUM_PUMP_LEFT, OUTPUT);
 
 	leftMotor.init(true);
 	rightMotor.init(true);
