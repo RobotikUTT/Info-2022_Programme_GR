@@ -33,13 +33,11 @@ const char rgb[] = "rgbypcwo"; // for the LED
 #define bas4 195
 #define haut4 530
 
-int mytimer = millis();
-
 void InitServo() {
-	goalsList.addGoal(new ax12a.begin(BaudRate, DirectionPin, &Serial1)); // init of Serial1 with BaudRate for AX12A
-  	goalsList.addGoal(new Serial2.begin(115200)); // init of Serial2 com for XL320
-  	goalsList.addGoal(new xl320.begin(Serial2)); // init of XL320 object on Serial2
-  	goalsList.addGoal(new xl320.setJointSpeed(XLBroad, 200)); // set speed of all XL320
+	ax12a.begin(BaudRate, DirectionPin, &Serial1); // init of Serial1 with BaudRate for AX12A
+  	Serial2.begin(115200); // init of Serial2 com for XL320
+  	xl320.begin(Serial2); // init of XL320 object on Serial2
+  	xl320.setJointSpeed(XLBroad, 200); // set speed of all XL320
   	Packed(); // init pos of servos at beginning of match
 }
 
