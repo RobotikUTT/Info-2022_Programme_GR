@@ -5,9 +5,11 @@
 #include "sensors.h"
 #include "pins.h"
 
-/* Constante pour le timeout ; 25ms = ~1.7m à 340m/s */
+/* Constante pour le timeout ; 5ms = ~1.7m à 340m/s */
 #define MEASURE_TIMEOUT 5000UL
 #define SOUND_SPEED 0.34  /* In mm per microsecond */
+#define SOUND_SPEED_MPS 340.5  /* In m per second */
+#define SOUND_SPEED_UPS 340.5  /* In m per microsecond */
 
 
 void init_sonars() {
@@ -30,6 +32,11 @@ double get_distance(const int captor_index) {
 
     /* Mesure le temps entre l'envoi de l'impulsion ultrasonique et son écho (si il existe) */
     unsigned long measure = pulseIn(echo_pins[captor_index], HIGH, MEASURE_TIMEOUT);
+
+
     /* Calcul la distance à partir du temps mesuré */
-    return (((double) measure) * SOUND_SPEED) / 2.0;
+    if (measure == 0)  // timeout expired before getting a response
+        return 999999;
+    else
+        return (((double) measure) * SOUND_SPEED) / 2.0;
 }

@@ -33,3 +33,4 @@
 
 # Platformio
 .pio/
+/Code_Nano/test_input/
