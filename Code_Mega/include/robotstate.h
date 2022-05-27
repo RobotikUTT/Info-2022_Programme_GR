@@ -26,8 +26,8 @@ public:
     void update();
 
     void setPosition(Position pos) { position = pos; }
-    inline const Position getPosition() const { return position; }
-    inline const WheelSpeeds getWheelSpeeds() const { return wheelSpeeds; }
+    Position getPosition() const { return position; }
+    WheelSpeeds getWheelSpeeds() const { return wheelSpeeds; }
 
 private:
     Position position = {0, 0, 0}; // mm, mm, rad

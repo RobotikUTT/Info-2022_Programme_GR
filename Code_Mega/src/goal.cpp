@@ -11,6 +11,8 @@ extern RobotState robotState;
 extern Control control;
 extern Nano nano;
 
+extern void theEnd();
+
 void Goto::process() {
 	if (doSubGoal) {
 		if (subGoal->isReached()) {
@@ -51,6 +53,12 @@ void Goto::process() {
 			}
 		}
 
+		if (thetaError > M_PI / 2 || thetaError < -M_PI /2) {
+			digitalWrite(LED_BLUE, LOW);
+			digitalWrite(LED_RED, HIGH);
+			theEnd();
+		}
+
 		if (abs(distanceError) < DIST_ERROR_TOLERANCE) { //&& abs(thetaError) < THETA_ERROR_TOLERANCE ) {
 			stop = true;
 			startTimeoutStop = millis();
@@ -80,9 +88,9 @@ void Goto::process() {
 		if (millis() - startTimeoutStop > STOP_TIMEOUT_MS
 			|| abs(currSpeed.left) + abs(currSpeed.right) <= SPEED_STOP_TOLERANCE) {
 			reached = true;
-			Position pos = {x, y, theta};
+			// Position pos = {x, y, theta};
 			// Position pos = {0, 0, 0};
-			robotState.setPosition(pos);
+			// robotState.setPosition(pos);
 			return;
 		}
 		control.updateMotorsSpeeds(0, 0);
@@ -118,8 +126,8 @@ void Rot::process() {
 			reached = true;
 			// Position pos = robotState.getPosition();
 			// pos.theta = theta;
-			Position pos = {x, y, theta};
-			robotState.setPosition(pos);
+			// Position pos = {x, y, theta};
+			// robotState.setPosition(pos);
 			return;
 		}
 		control.updateMotorsSpeeds(0, 0);
@@ -145,7 +153,7 @@ void Jog::process() {
 		control.updateMotorsSpeeds(0, 0);
 	}
 	else {
-		rampCoeff = min(1, rampCoeff + 1.0 / RAMP_NB_STEPS);
+		rampCoeff = min(1, rampCoeff + 2 * 1.0 / RAMP_NB_STEPS);
 		float filteredLinearSpeed = control.filterLinearSpeed(linearSpeed * rampCoeff, 0);
 		float filteredAngularSpeed = control.filterAngularSpeed(angularSpeed * rampCoeff);
 		control.updateMotorsSpeeds(filteredLinearSpeed, filteredAngularSpeed);

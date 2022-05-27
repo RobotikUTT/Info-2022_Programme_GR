@@ -129,10 +129,10 @@ float Control::filterAngularSpeed(float speed) {
 			speed = collisions.getMaxSpeed();
 		}
 
-		if (speed - currentAngularSpeed > MAX_ACCELERATION_DIFFERENCE) {
-			speed = currentAngularSpeed + MAX_ACCELERATION_DIFFERENCE;
-		} else if (speed - currentAngularSpeed < - MAX_BRAKE_DIFFERENCE) {
-			speed = currentAngularSpeed - MAX_BRAKE_DIFFERENCE;
+		if (speed - currentAngularSpeed > MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
+			speed = currentAngularSpeed + MAX_ANGULAR_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentAngularSpeed < - MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
+			speed = currentAngularSpeed - MAX_ANGULAR_ACCELERATION_DIFFERENCE;
 		}
 
 		if (speed > MAX_ANGULAR_SPEED) {
@@ -144,10 +144,10 @@ float Control::filterAngularSpeed(float speed) {
 			speed = - collisions.getMaxSpeed();
 		}
 
-		if (speed - currentAngularSpeed < - MAX_ACCELERATION_DIFFERENCE) {
-			speed = currentAngularSpeed - MAX_ACCELERATION_DIFFERENCE;
-		} else if (speed - currentAngularSpeed > MAX_BRAKE_DIFFERENCE) {
-			speed = currentAngularSpeed + MAX_BRAKE_DIFFERENCE;
+		if (speed - currentAngularSpeed < - MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
+			speed = currentAngularSpeed - MAX_ANGULAR_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentAngularSpeed > MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
+			speed = currentAngularSpeed + MAX_ANGULAR_ACCELERATION_DIFFERENCE;
 		}
 
 		if (speed < - MAX_ANGULAR_SPEED) {

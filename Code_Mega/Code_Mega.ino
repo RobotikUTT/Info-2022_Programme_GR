@@ -125,6 +125,7 @@ void asservLoop() {
 	#ifdef PLOT
 	plot();
 	#endif // PLOT
+	delay(1);
 }
 
 void waitForTirette() {

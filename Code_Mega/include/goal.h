@@ -29,7 +29,7 @@ public:
 		#endif // DEBUG_GOAL
 	}
 
-	inline bool isReached() const { return reached; }
+	bool isReached() const { return reached; }
 
 protected:
 	bool reached = false;
