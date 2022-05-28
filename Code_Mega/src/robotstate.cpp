@@ -33,13 +33,22 @@ void RobotState::update() {
 		#endif // DEBUG_ROBOTSTATE
 		return;
 	}
+	/* LOW PASS FILTER */
+	speedLeft = wheelSpeeds.left + ALPHA * (speedLeft - wheelSpeeds.left);
+	speedRight = wheelSpeeds.right + ALPHA * (speedRight - wheelSpeeds.right);
+
 	wheelSpeeds.left = speedLeft;
 	wheelSpeeds.right = speedRight;
 
 	float dAngle = atan2((dRight - dLeft), ENTRAXE);
 	position.theta += dAngle;
 	position.theta = fmod(position.theta, 2 * M_PI);
-	// float tetaMod = fmod(position.theta, 2 * M_PI);
+	if (position.theta > M_PI) {
+		position.theta -= 2 * M_PI;
+	}
+	else if (position.theta < -M_PI) {
+		position.theta += 2 * M_PI;
+	}
 
 	float dDistance = (dRight + dLeft) / 2.0;
 

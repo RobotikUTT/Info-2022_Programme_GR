@@ -19,8 +19,8 @@
 /* ACTION SET SELECTION */
 /************************/
 // #include "actionsets/manualServos.h"
-// #include "actionsets/calibration.h"
-#include "actionsets/homologation.h"
+#include "actionsets/calibration.h"
+// #include "actionsets/homologation.h"
 // void fillGoals() {};	// Uncomment for no Action Set
 /************************/
 
@@ -95,6 +95,8 @@ void setup() {
 	waitForTirette();
 	#endif // NOT BYPASS_TIRETTE
 	checkSwitchSideSelect(false);
+	Position reset_pos = {0, 0, 0};
+	robotState.setPosition(reset_pos);
 
 	matchStart = millis();
 	fillGoals();
@@ -198,9 +200,9 @@ void plot() {
 		// Serial.write(' ');
 		#endif // PLOT_MOTOR_SPD
 		#ifdef PLOT_MOTOR_ERR
-		// PID pidL = control.getLeftWheelPID();
+		PID pidL = control.getLeftWheelPID();
 		// PID pidL = control.getAngularPID();
-		PID pidL = control.getLinearPID();
+		// PID pidL = control.getLinearPID();
 		// PID pidR = control.getRightWheelPID();
 		Serial.print(pidL.getError() * pidL.getP());
 		Serial.write(' ');

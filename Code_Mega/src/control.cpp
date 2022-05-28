@@ -131,8 +131,8 @@ float Control::filterAngularSpeed(float speed) {
 
 		if (speed - currentAngularSpeed > MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
 			speed = currentAngularSpeed + MAX_ANGULAR_ACCELERATION_DIFFERENCE;
-		} else if (speed - currentAngularSpeed < - MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
-			speed = currentAngularSpeed - MAX_ANGULAR_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentAngularSpeed < - MAX_ANGULAR_BRAKE_DIFFERENCE) {
+			speed = currentAngularSpeed - MAX_ANGULAR_BRAKE_DIFFERENCE;
 		}
 
 		if (speed > MAX_ANGULAR_SPEED) {
@@ -146,8 +146,8 @@ float Control::filterAngularSpeed(float speed) {
 
 		if (speed - currentAngularSpeed < - MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
 			speed = currentAngularSpeed - MAX_ANGULAR_ACCELERATION_DIFFERENCE;
-		} else if (speed - currentAngularSpeed > MAX_ANGULAR_ACCELERATION_DIFFERENCE) {
-			speed = currentAngularSpeed + MAX_ANGULAR_ACCELERATION_DIFFERENCE;
+		} else if (speed - currentAngularSpeed > MAX_ANGULAR_BRAKE_DIFFERENCE) {
+			speed = currentAngularSpeed + MAX_ANGULAR_BRAKE_DIFFERENCE;
 		}
 
 		if (speed < - MAX_ANGULAR_SPEED) {

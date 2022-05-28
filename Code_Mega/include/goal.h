@@ -15,6 +15,17 @@
  * \brief Mother goal class. Represents an empty goal.
 **/
 
+enum goto_dir_t {
+	AUTO,
+	FORWARD,
+	BACKWARD
+};
+
+enum rot_dir_t {
+	CLOSEST,
+	CLOCKWISE,
+	COUNTER_CLOCKWISE
+};
 
 class Goal {
 public:
@@ -44,18 +55,20 @@ public:
 	 * \brief constructor of Goto order.
 	 * \param x x coordinate in mm
 	 * \param y y coordinate in mm
+	 * \param direction Foward, Backward or Auto
 	 * \param maxSpeed max speed at which we want to go in mm/s. Cannot exceed MAX_SPEED. 0 for default.
 	**/
-	Goto(float x, float y, float maxSpeed = 0) : Goal(), x(x), y(y), maxSpeed(maxSpeed) {}
+	Goto(float x, float y, goto_dir_t direction = AUTO, float maxSpeed = 0) : Goal(), x(x), y(y), maxSpeed(maxSpeed), direction(direction) {}
 
 	virtual void process();
 
 private:
 	float x, y, theta, maxSpeed; // mm, mm, mm/s
-	float rampCoeff = 0;
+	float rampCoeff = 0, normalizedRampStep;
 	unsigned long startTimeoutStop = 0;
 	bool stop = false, init = false, doSubGoal = false;
 	Goal* subGoal;
+	goto_dir_t direction;
 };
 
 /**
@@ -63,15 +76,16 @@ private:
 **/
 class Rot : public Goal {
 public:
-	Rot(float theta) : Goal(), theta(theta) {}
+	Rot(float theta, rot_dir_t direction = CLOSEST) : Goal(), theta(theta), direction(direction) {}
 
 	virtual void process();
 
 private:
 	float x, y, theta; // rad
-	float rampCoeff = 0;
-	bool stop = false, init = true;
+	float rampCoeff = 0, normalizedRampStep;
+	bool stop = false, init = false;
 	unsigned long startTimeoutStop = 0;
+	rot_dir_t direction;
 };
 
 /**
@@ -92,7 +106,6 @@ public:
 
 private:
 	float linearSpeed, angularSpeed; // mm/s, mm/s
-	float rampCoeff = 0;
 	unsigned long duration, // ms
 	startTimeGoal = 0, startTimeoutStop = 0; // ms, ms
 };
@@ -115,6 +128,21 @@ public:
 private:
 	uint8_t sonarMask;
 	bool inhib;
+};
+
+class Delay : public Goal {
+public:
+	/**
+	 * \brief constructor of Delay order.
+	 * \param sonarMask Bit mask of the sonars to modify
+	 * \param inhib if true: inhib selected sonars, else reactivate them
+	**/
+	Delay(uint32_t duration) : Goal(), duration(duration) {}
+
+	virtual void process();
+
+private:
+	uint32_t duration, startTime = 0;
 };
 
 

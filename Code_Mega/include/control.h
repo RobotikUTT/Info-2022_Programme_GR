@@ -39,9 +39,9 @@ public:
 
 private:
 	PID linearPID = PID(1.8, 0, -0.1, 50 / 0.0002);
-	PID angularPID = PID(150, 0, -0.2, MAX_ANGULAR_SPEED / 0.25);
-	PID leftWheelPID = PID(3.4, 0.09, 0, 255.0 / 0.09);
-	PID rightWheelPID = PID(3.4, 0.09, 0, 255.0 / 0.09);
+	PID angularPID = PID(200, 0, -10, MAX_ANGULAR_SPEED / 0.25);
+	PID leftWheelPID = PID(2, 0.2, -1, 255.0 / 0.2);
+	PID rightWheelPID = PID(2, 0.2, -1, 255.0 / 0.2);
 
 	float currentLinearSpeed = 0;
 	float currentAngularSpeed = 0;

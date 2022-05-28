@@ -13,6 +13,18 @@ extern Nano nano;
 
 extern void theEnd();
 
+float diffAngleClosest(float theta_A, float theta_B) {
+	// diff between angle with [-pi, pi] boundaries
+	float delta = theta_A - theta_B;
+	if (delta > M_PI) {
+		delta -= 2 * M_PI;
+	}
+	else if (delta < -M_PI) {
+		delta += 2 * M_PI;
+	}
+	return delta;
+}
+
 void Goto::process() {
 	if (doSubGoal) {
 		if (subGoal->isReached()) {
@@ -27,27 +39,48 @@ void Goto::process() {
 	if (!stop) {
 		float dx = x - robotState.getPosition().x;
 		float dy = y - robotState.getPosition().y;
+		float targetAngle = atan2(dy, dx);
+		if (direction == AUTO) { // Called only in the first process() call
+			if (abs(diffAngleClosest(targetAngle, robotState.getPosition().theta)) > M_PI / 2) {
+				direction = BACKWARD;
+			}
+			else {
+				direction = FORWARD;
+			}
+		}
+		if (direction == BACKWARD) {
+			if (targetAngle < 0) {
+				targetAngle += M_PI;
+			}
+			else {
+				targetAngle += M_PI;
+			}
+		}
 		/*Serial.print("dx: ");
 		Serial.println(dx );
 		Serial.print("dy: ");
 		Serial.println(dy);*/
 
 		float distanceError = sqrt(pow(dx, 2) + pow(dy, 2));
-		float thetaError = atan2(dy, dx) - robotState.getPosition().theta;
+		if (direction == BACKWARD) {
+			distanceError = - distanceError;
+		}
+		float thetaError = diffAngleClosest(targetAngle, robotState.getPosition().theta);
 
 		if (!init) {
 			init = true;
-			theta = atan2(dy, dx);
+			normalizedRampStep = RAMP_STEP_GOTO / abs(distanceError) ; // 1 / (abs(distanceError) / RAMP_STEP_GOTO)
+
 			// #ifdef DEBUG_GOAL
 			// Serial.print("Theta Error: ");
 			// Serial.println(thetaError);
-			// Serial.print("atan2(dy, dx): ");
-			// Serial.println(atan2(dy, dx));
+			// Serial.print("targetAngle: ");
+			// Serial.println(targetAngle);
 			// Serial.print("RobotState.theta: ");
 			// Serial.println(robotState.getPosition().theta);
 			// #endif // DEBUG_GOAL
 			if (thetaError) {
-				subGoal = new Rot(atan2(dy, dx));
+				subGoal = new Rot(targetAngle);
 				doSubGoal = true;
 				return;
 			}
@@ -78,7 +111,7 @@ void Goto::process() {
 			Serial.println(thetaError);
 			Serial.print("dError: ");
 			//Serial.println(distanceError);*/
-			rampCoeff = min(1.0, rampCoeff + 1.0 / RAMP_NB_STEPS);
+			rampCoeff = min(1.0, rampCoeff + normalizedRampStep);
 			control.updateSpeeds(distanceError * rampCoeff, thetaError * rampCoeff, maxSpeed);
 			// control.updateSpeeds(distanceError * rampCoeff, 0, maxSpeed);
 		}
@@ -98,24 +131,41 @@ void Goto::process() {
 }
 
 void Rot::process() {
-	if (!init) {
-		init = true;
-		x = robotState.getPosition().x;
-		y = robotState.getPosition().y;
-	}
 	if (!stop) {
-		float thetaError = theta - robotState.getPosition().theta;
+		if (!init) {
+			x = robotState.getPosition().x;
+			y = robotState.getPosition().y;
+		}
+		float thetaError = diffAngleClosest(theta, robotState.getPosition().theta);
+		if (direction == CLOCKWISE) {
+			if (thetaError > 0) {
+				thetaError -= 2 * M_PI;
+			}
+			else { // Direction is ok, switch to CLOSEST to avoid problem in case of overshoot
+				direction = CLOSEST;
+			}
+		}
+		else if (direction == COUNTER_CLOCKWISE) {
+			if (thetaError < 0) {
+				thetaError += 2 * M_PI;
+			}
+			else { // Direction is ok, switch to CLOSEST to avoid problem in case of overshoot
+				direction = CLOSEST;
+			}
+		}
+
 		if (abs(thetaError) < THETA_ERROR_TOLERANCE) {
 			stop = true;
 			startTimeoutStop = millis();
 			// control.resetPIDs();
 			control.updateMotorsSpeeds(0, 0);
-			#ifdef DEBUG_GOAL
-			Serial.println("Goal: Rot Reached");
-			#endif // DEBUG_GOAL
 		}
 		else {
-			rampCoeff = min(1.0, rampCoeff + 1.0 / RAMP_NB_STEPS);
+			if (!init) {
+				init = true;
+				normalizedRampStep = RAMP_STEP_ROT / abs(thetaError); // 1 / (abs(distanceError) / RAMP_STEP_ROT)
+			}
+			rampCoeff = min(1.0, rampCoeff + normalizedRampStep);
 			control.updateSpeeds(0, thetaError * rampCoeff);
 		}
 	}
@@ -142,7 +192,6 @@ void Jog::process() {
 	else if (millis() - startTimeGoal >= duration) {
 		if (!startTimeoutStop) {
 			startTimeoutStop = millis();
-			// control.resetPIDs();
 		}
 		WheelSpeeds currSpeed = robotState.getWheelSpeeds();
 		if (millis() - startTimeoutStop > STOP_TIMEOUT_MS
@@ -153,9 +202,8 @@ void Jog::process() {
 		control.updateMotorsSpeeds(0, 0);
 	}
 	else {
-		rampCoeff = min(1, rampCoeff + 2 * 1.0 / RAMP_NB_STEPS);
-		float filteredLinearSpeed = control.filterLinearSpeed(linearSpeed * rampCoeff, 0);
-		float filteredAngularSpeed = control.filterAngularSpeed(angularSpeed * rampCoeff);
+		float filteredLinearSpeed = control.filterLinearSpeed(linearSpeed, 0);
+		float filteredAngularSpeed = control.filterAngularSpeed(angularSpeed);
 		control.updateMotorsSpeeds(filteredLinearSpeed, filteredAngularSpeed);
 	}
 }
@@ -170,4 +218,13 @@ void InhibSonar::process() {
 	}
 	nano.setSonarInhib(sonarInhib_);
 	reached = true;
+}
+
+void Delay::process() {
+	if (!startTime) {
+		startTime = millis();
+	}
+	else if (millis() - startTime >= duration) {
+		reached = true;
+	}
 }

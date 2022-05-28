@@ -31,17 +31,23 @@
 /* Main loop */
 #define RATE_HZ 50 // Hz
 #define TIMER_MS (1000.0 / RATE_HZ) // ms
+#define DT (TIMER_MS / 1000.0)
+#define FC (10)
+#define RC (1.0 / (2.0 * M_PI * FC))
+#define ALPHA (DT / (RC + DT))
 #define MATCH_LENGTH_MS 99000 // ms
 
 /* Speed constants */
 #define MAX_SPEED 350 // mm/s
-#define MAX_ANGULAR_SPEED 250 // mm/s
+#define MAX_ANGULAR_SPEED 170 // mm/s
 #define MAX_ACCEL 15000 // mm/s^2
-#define MAX_ACCELERATION_DIFFERENCE 2	//MAX_ACCEL / RATE_HZ // mm/s
-#define MAX_ANGULAR_ACCELERATION_DIFFERENCE 5
-#define BRAKE_COEFF 5.0	// brakes BRAKE_COEFF times more than accelerates
+#define MAX_ACCELERATION_DIFFERENCE 4	//MAX_ACCEL / RATE_HZ // mm/s
+#define MAX_ANGULAR_ACCELERATION_DIFFERENCE 10
+#define BRAKE_COEFF 1.0	// brakes BRAKE_COEFF times more than accelerates
+#define BRAKE_COEFF_ANGULAR 2.0 // brakes BRAKE_COEFF times more than accelerates
 #define MAX_BRAKE_DIFFERENCE (MAX_ACCELERATION_DIFFERENCE * BRAKE_COEFF) // mm/s
-#define MAX_PWM_DIFFERENCE_ACC 30
+#define MAX_ANGULAR_BRAKE_DIFFERENCE (MAX_ANGULAR_ACCELERATION_DIFFERENCE * BRAKE_COEFF_ANGULAR) // mm/s
+#define MAX_PWM_DIFFERENCE_ACC 15
 #define MAX_PWM_DIFFERENCE_BRK 30
 #define STOP_TIMEOUT_MS 1000
 
@@ -58,7 +64,8 @@
 #define COLLISIONS_STOP_DISTANCE 150 // mm
 
 /* Goals */
-#define RAMP_NB_STEPS 50
+#define RAMP_STEP_GOTO 1.5
+#define RAMP_STEP_ROT 0.005
 #define DIST_ERROR_TOLERANCE 2 // mm
 #define THETA_ERROR_TOLERANCE 0.005 // rad
 #define SPEED_STOP_TOLERANCE 1 // mm/s
