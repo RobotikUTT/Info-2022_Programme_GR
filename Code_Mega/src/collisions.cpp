@@ -26,7 +26,7 @@ void Collisions::update() {
 		if (activeCounts[0]) activeCounts[0]--;
 	}
 
-	if (activeSonars & SONAR_BACK_RIGHT) {
+	if (activeSonars & SONAR_FRONT_LEFT) {
 		if (currSpeed.right < 0 && activeCounts[1] < TRESHOLD_COUNT) {
 			activeCounts[1]++;
 		}
@@ -35,7 +35,7 @@ void Collisions::update() {
 		if (activeCounts[1]) activeCounts[1]--;
 	}
 
-	if (activeSonars & SONAR_FRONT_LEFT) {
+	if (activeSonars & SONAR_BACK_RIGHT) {
 		if (currSpeed.left > 0 && activeCounts[2] < TRESHOLD_COUNT) {
 			activeCounts[2]++;
 		}
@@ -62,6 +62,22 @@ void Collisions::update() {
 			activeCounts[3] >= TRESHOLD_COUNT
 		) {
 			maxSpeed = 0;
+			#ifdef DEBUG_SONAR
+			Serial.print("STOP ! ");
+			if (activeCounts[0] >= TRESHOLD_COUNT) {
+				Serial.print("SONAR_FRONT_RIGHT ");
+			}
+			if (activeCounts[1] >= TRESHOLD_COUNT) {
+				Serial.print("SONAR_FRONT_LEFT ");
+			}
+			if (activeCounts[2] >= TRESHOLD_COUNT) {
+				Serial.print("SONAR_BACK_RIGHT ");
+			}
+			if (activeCounts[3] >= TRESHOLD_COUNT) {
+				Serial.print("SONAR_BACK_LEFT ");
+			}
+			Serial.write('\n');
+			#endif // DEBUG_SONAR
 		}
 	}
 	else {
@@ -72,6 +88,9 @@ void Collisions::update() {
 			activeCounts[3]
 		)) {
 			maxSpeed = MAX_SPEED;
+			#ifdef DEBUG_SONAR
+			Serial.println("GO ! ");
+			#endif // DEBUG_SONAR
 		}
 	}
 }

@@ -23,6 +23,7 @@
 #ifdef DEBUG
 #define DEBUG_MATCH
 #define DEBUG_GOAL
+// #define DEBUG_SONAR
 // #define DEBUG_PID
 // #define DEBUG_MOTOR
 // #define DEBUG_ROBOTSTATE
@@ -35,7 +36,7 @@
 #define FC (10)
 #define RC (1.0 / (2.0 * M_PI * FC))
 #define ALPHA (DT / (RC + DT))
-#define MATCH_LENGTH_MS 99000 // ms
+#define MATCH_LENGTH_MS 95000 // ms
 
 /* Speed constants */
 #define MAX_SPEED 350 // mm/s

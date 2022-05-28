@@ -12,6 +12,7 @@ void setup() {
     Serial.begin(9600);
     init_sonars();
     init_lcd();
+    display_score(0);
 }
 
 
@@ -21,8 +22,11 @@ void loop() {
     serial_in();
 
     for (int i = 0; i < NB_CAPTORS; ++i) {
-        const double distance = get_distance(i);
-        const uint8_t message = distance > 255 ? 255 : (uint8_t) distance;
+        double distance = get_distance(i);
+        if (distance < 200 && distance)
+            message |= 0b1 << i;  // set the i-th bit to 1
+        else
+            message &= ~(0b1 << i);  // set the i-th bit to 0
         serial_out(message);
     }
 }
