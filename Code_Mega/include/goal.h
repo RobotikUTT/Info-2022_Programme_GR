@@ -145,6 +145,16 @@ private:
 	uint32_t duration, startTime = 0;
 };
 
+class DisplayScore : public Goal {
+public:
+	DisplayScore(uint8_t score) : Goal(), score(score) {}
+
+	virtual void process();
+
+private:
+	uint8_t score;
+};
+
 
 // add new goals here and override process()
 

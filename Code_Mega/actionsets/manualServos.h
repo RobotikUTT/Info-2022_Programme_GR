@@ -4,23 +4,15 @@
 **/
 
 #include <Arduino.h>
-#include <XL320.h>
-#include <AX12A.h>
 
 #include "../include/goal.h"
 #include "../include/goalslist.h"
+#include "../include/servos.h"
+
+extern Servos servos;
 
 
 #define BYPASS_TIRETTE
-
-#define DirectionPin  (10u)
-#define BaudRate    (1000000ul)
-#define ID    (254u)
-#define XLR1 1
-#define XLR2 3
-#define XLL1 2
-#define XLL2 4
-
 
 extern GoalsList goalsList;
 
@@ -88,14 +80,16 @@ void ManualServos::process() {
 			return;
 		}
 		int position = Serial.parseInt();
+		Serial.print("Go position: ");
+		Serial.println(position);
 
 		if (arm == 'R') {
 			switch (servo_nb) {
 				case '0':
-					// TODO : move servo R0 to `position`
+					servos.setPosXL320(1, position);
 					break;
 				case '1':
-					// TODO : move servo R1 to `position`
+					servos.setPosXL320(3, position);
 					break;
 				case '2':
 					// TODO : move servo R2 to `position`
@@ -105,10 +99,10 @@ void ManualServos::process() {
 		else {
 			switch (servo_nb) {
 				case '0':
-					// TODO : move servo L0 to `position`
+					servos.setPosXL320(2, position);
 					break;
 				case '1':
-					// TODO : move servo L1 to `position`
+					servos.setPosXL320(4, position);
 					break;
 				case '2':
 					// TODO : move servo L2 to `position`

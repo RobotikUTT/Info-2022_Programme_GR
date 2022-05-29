@@ -228,3 +228,8 @@ void Delay::process() {
 		reached = true;
 	}
 }
+
+void DisplayScore::process() {
+	nano.sendScore(score);
+	reached = true;
+}

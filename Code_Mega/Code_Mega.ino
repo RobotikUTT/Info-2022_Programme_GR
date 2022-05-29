@@ -8,6 +8,7 @@
 #include "include/pins.h"
 #include "include/parameters.h"
 #include "include/nano.h"
+#include "include/servos.h"
 #include "include/motor.h"
 #include "include/control.h"
 #include "include/collisions.h"
@@ -19,12 +20,14 @@
 /* ACTION SET SELECTION */
 /************************/
 // #include "actionsets/manualServos.h"
-#include "actionsets/calibration.h"
+#include "actionsets/strat1.h"
+// #include "actionsets/strat2.h"
 // #include "actionsets/homologation.h"
 // void fillGoals() {};	// Uncomment for no Action Set
 /************************/
 
 extern Nano nano;
+extern Servos servos;
 extern Motor leftMotor;
 extern Motor rightMotor;
 extern Control control;
@@ -89,6 +92,7 @@ void setup() {
 
 	leftMotor.init(true);
 	rightMotor.init(true);
+	// servos.init();
 
 	checkSwitchSideSelect(true);
 	#ifndef BYPASS_TIRETTE
@@ -99,7 +103,7 @@ void setup() {
 	robotState.setPosition(reset_pos);
 
 	matchStart = millis();
-	fillGoals();
+	fillGoals(); 
 }
 
 void loop() {

@@ -24,9 +24,9 @@
 #define DEBUG_MATCH
 #define DEBUG_GOAL
 // #define DEBUG_SONAR
-// #define DEBUG_PID
-// #define DEBUG_MOTOR
-// #define DEBUG_ROBOTSTATE
+#define DEBUG_PID
+#define DEBUG_MOTOR
+#define DEBUG_ROBOTSTATE
 #endif // DEBUG
 
 /* Main loop */
